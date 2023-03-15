@@ -5,7 +5,7 @@ if (project.hasProperty('disableShipkit')) {
 }
 
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.artifactory'
+//apply plugin: 'com.jfrog.artifactory'
 
 ////////////////////////////////////////////////
 // Artifact setup
@@ -48,16 +48,12 @@ def pomConfig = {
   licenses {
     license {
       name = 'The Apache License, Version 2.0'
-      url = 'https://github.com/linkedin/datahub-gma/blob/master/LICENSE'
+      url = 'https://github.com/imec-int/datahub-gma/blob/master/LICENSE'
       distribution = 'repo'
     }
   }
   scm {
-    url = 'https://github.com/linkedin/datahub-gma.git'
-  }
-  issueManagement {
-    url = 'https://github.com/linkedin/datahub-gma/issues'
-    system = 'GitHub issues'
+    url = 'https://github.com/imec-int/datahub-gma.git'
   }
 }
 
@@ -84,45 +80,56 @@ publishing {
       }
     }
   }
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/imec-int/datahub-gma"
+      credentials {
+        username = "imec-int"
+        password = System.getenv("PACKAGES_TOKEN")
+      }
+    }
+  }
 }
+
 
 ////////////////////////////////////////////////
 // Artifactory publishing
 ////////////////////////////////////////////////
 
-artifactory {
-  contextUrl = 'https://linkedin.jfrog.io/artifactory'
-  publish {
-    repository {
-      repoKey = 'datahub-gma'
-      username = System.getenv('ARTIFACTORY_USER')
-      password = System.getenv('ARTIFACTORY_KEY')
-      maven = true
-    }
-
-    defaults {
-      if (project.ext.has('publications')) {
-        publications(*project.ext.publications)
-      } else {
-        publications('jar')
-
-        if (plugins.hasPlugin('pegasus')) {
-          publications('jar', 'dataTemplate')
-        }
-      }
-    }
-  }
-
-  resolve {
-    repository {
-      repoKey = 'release'
-      username = System.getenv('ARTIFACTORY_USER')
-      password = System.getenv('ARTIFACTORY_KEY')
-      maven = true
-    }
-  }
-}
-
-artifactoryPublish {
-  skip = project.hasProperty('artifactory.dryRun')
-}
+//artifactory {
+//  contextUrl = 'https://linkedin.jfrog.io/artifactory'
+//  publish {
+//    repository {
+//      repoKey = 'datahub-gma'
+//      username = System.getenv('ARTIFACTORY_USER')
+//      password = System.getenv('ARTIFACTORY_KEY')
+//      maven = true
+//    }
+//
+//    defaults {
+//      if (project.ext.has('publications')) {
+//        publications(*project.ext.publications)
+//      } else {
+//        publications('jar')
+//
+//        if (plugins.hasPlugin('pegasus')) {
+//          publications('jar', 'dataTemplate')
+//        }
+//      }
+//    }
+//  }
+//
+//  resolve {
+//    repository {
+//      repoKey = 'release'
+//      username = System.getenv('ARTIFACTORY_USER')
+//      password = System.getenv('ARTIFACTORY_KEY')
+//      maven = true
+//    }
+//  }
+//}
+//
+//artifactoryPublish {
+//  skip = project.hasProperty('artifactory.dryRun')
+//}

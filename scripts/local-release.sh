@@ -4,12 +4,12 @@
 
 VERSION="$(./gradlew -q getVersion)-SNAPSHOT"
 
-echo "Publishing GMA $VERSION to ${LOCAL_REPO}..."
+echo "Publishing GMA $VERSION to..."
 
-./gradlew publishToMavenLocal -Pversion="${VERSION}"
+./gradlew publish -Pversion="${VERSION}"
 
 if [ $? = 0 ]; then
-  echo "Published GMA $VERSION to local maven"
+  echo "Published GMA $VERSION"
 else
   exit 1
 fi
